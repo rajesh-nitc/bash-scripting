@@ -1,0 +1,10 @@
+[
+    {
+        "projectName": "repo1",
+        "gitUrl": "https://repo1.git"
+    },
+    {
+        "projectName": "repo2",
+        "gitUrl": "https://repo2.git"
+    }
+]
