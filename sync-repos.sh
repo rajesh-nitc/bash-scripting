@@ -1,15 +1,11 @@
 #!/bin/bash
 
 function syncRepos(){
-    
     # Capture the Arguments
     name_arg=$1
     url_arg=$2
-
     echo "$name_arg & $url_arg"
-    
-    # git clone --mirror
-    # git push --mirror 
+    # git commands
 }
 
 # jq compact is important for looping
