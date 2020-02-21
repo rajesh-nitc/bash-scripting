@@ -1,2 +1,2 @@
-MYUSER=rajesh
-MYEMAIL=rajesh.nitc@gmail.com
+USER=rajesh
+EMAIL=rajesh.nitc@gmail.com
