@@ -11,17 +11,19 @@ EOF
  exit 1
 fi
 
+SERVICE=$2
+
 function service_start() {
-  systemctl start $2
+  systemctl start $SERVICE
 }
 
 function service_stop(){
-  systemctl stop $2
+  systemctl stop $SERVICE
 }
 
 function service_status(){
-  status=$(systemctl show -p SubState --value $2)
-  echo "$2 is $status"
+  status=$(systemctl show -p SubState --value $SERVICE)
+  echo "$SERVICE is $status"
 }
 
 case $1 in
