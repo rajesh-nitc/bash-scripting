@@ -44,3 +44,4 @@ gcloud compute os-login ssh-keys add --key-file=$ANSIBLE_SSHKEY_FILEPATH.pub
 # id=$(gcloud iam service-accounts describe $ANSIBLE_SERVICE_ACCOUNT_EMAIL --format='value(uniqueId)')
 # ssh user will be sa_id
 # ssh -i ~/.ssh/ssh-key-ansible sa_id@ipaddress
+# source: https://alex.dzyoba.com/blog/gcp-ansible-service-account/
