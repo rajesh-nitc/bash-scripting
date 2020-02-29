@@ -7,7 +7,7 @@ set -xe
 # sudo sh get-docker.sh
 # sudo usermod -aG docker $USER
 
-PUBLIC_IP="34.93.19.14"
+PUBLIC_IP=""
 GITLAB_CONTAINER_NAME="gitlab"
 JFROG_CONTAINER_NAME="artifactory"
 
@@ -27,6 +27,7 @@ sudo docker run --detach \
   --volume /srv/gitlab/data:/var/opt/gitlab \
   gitlab/gitlab-ce:latest
 fi
+# gitlab login details:: user: root
 
 # jfrog
 JFROG_HOME=/home/$USER
@@ -38,7 +39,9 @@ jfrog_container_state=$(docker inspect $JFROG_CONTAINER_NAME | jq -r '.[].State.
 if [ $jfrog_container_state != "running" ]; then
 docker run --name $JFROG_CONTAINER_NAME -v $JFROG_HOME/artifactory/var/:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 docker.bintray.io/jfrog/artifactory-cpp-ce:latest
 fi
+# jfrog login details:: user:admin password:password
 
-# runner
+# runner on vm
+# install docker
 # curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
 # sudo apt-get install gitlab-runner -y
