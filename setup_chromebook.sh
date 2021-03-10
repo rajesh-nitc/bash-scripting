@@ -6,7 +6,7 @@ TERRAFORM_VERSION=0.14.4
 TERRAFORM_DOCS_VERSION=0.10.1
 KUSTOMIZE_VERSION=3.9.2
 
-sudo apt-get install -y apt-transport-https ca-certificates gnupg
+sudo apt-get install -y apt-transport-https ca-certificates gnupg dnsutils zip
 
 # vs code
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
