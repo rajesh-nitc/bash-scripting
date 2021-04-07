@@ -39,3 +39,9 @@ curl -k -LO https://github.com/kubernetes-sigs/kustomize/releases/download/kusto
 tar xzf kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
 sudo mv kustomize /usr/local/bin
 rm kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
+
+# pre-commit terraform
+sudo apt install -y gawk unzip software-properties-common
+sudo apt install -y python3.7 python3-pip
+pip3 install pre-commit
+export PATH=$PATH:/home/$USER/.local/bin
