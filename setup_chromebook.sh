@@ -1,12 +1,16 @@
 #!/bin/bash
 
-set -xe
+# enable debugging
+set -x
 
-TERRAFORM_VERSION=0.14.4
+# abort on error
+set -e
+
+TERRAFORM_VERSION=0.13.0
 TERRAFORM_DOCS_VERSION=0.10.1
 KUSTOMIZE_VERSION=3.9.2
 
-sudo apt-get install -y apt-transport-https ca-certificates gnupg dnsutils zip
+sudo apt-get install -y apt-transport-https ca-certificates gnupg dnsutils zip gawk unzip software-properties-common
 
 # vs code
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -40,8 +44,14 @@ tar xzf kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
 sudo mv kustomize /usr/local/bin
 rm kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
 
+# python
+sudo apt install -y python3 python3-dev python3-venv python3-pip
+
+# jupyter notebook
+pip3 install jupyterlab
+pip3 install bash_kernel
+python3 -m bash_kernel.install
+
 # pre-commit terraform
-sudo apt install -y gawk unzip software-properties-common
-sudo apt install -y python3.7 python3-pip
 pip3 install pre-commit
 export PATH=$PATH:/home/$USER/.local/bin
