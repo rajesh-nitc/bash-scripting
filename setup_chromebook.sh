@@ -7,6 +7,7 @@ set -x
 set -e
 
 TERRAFORM_VERSION=0.13.0
+TERRAFORM_VALIDATOR_VERSION=2021-03-22
 TERRAFORM_DOCS_VERSION=0.10.1
 KUSTOMIZE_VERSION=3.9.2
 
@@ -55,3 +56,8 @@ python3 -m bash_kernel.install
 # pre-commit terraform
 pip3 install pre-commit
 export PATH=$PATH:/home/$USER/.local/bin
+
+# terraform validator
+gsutil cp gs://terraform-validator/releases/${TERRAFORM_VALIDATOR_VERSION}/terraform-validator-linux-amd64 .
+chmod +x terraform-validator-linux-amd64
+sudo mv terraform-validator-linux-amd64 /usr/local/bin/terraform-validator
