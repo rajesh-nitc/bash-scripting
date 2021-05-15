@@ -11,7 +11,7 @@ TERRAFORM_VALIDATOR_VERSION=2021-03-22
 TERRAFORM_DOCS_VERSION=0.10.1
 KUSTOMIZE_VERSION=3.9.2
 
-sudo apt-get install -y apt-transport-https ca-certificates gnupg dnsutils zip gawk unzip software-properties-common
+sudo apt-get install -y apt-transport-https ca-certificates gnupg lsb-release dnsutils zip gawk unzip software-properties-common
 
 # vs code
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -61,3 +61,9 @@ export PATH=$PATH:/home/$USER/.local/bin
 gsutil cp gs://terraform-validator/releases/${TERRAFORM_VALIDATOR_VERSION}/terraform-validator-linux-amd64 .
 chmod +x terraform-validator-linux-amd64
 sudo mv terraform-validator-linux-amd64 /usr/local/bin/terraform-validator
+
+# docker
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
