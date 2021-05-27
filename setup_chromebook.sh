@@ -46,7 +46,8 @@ sudo mv kustomize /usr/local/bin
 rm kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
 
 # python
-sudo apt install -y python3 python3-dev python3-venv python3-pip pip-tools
+sudo apt install -y python3 python3-dev python3-venv python3-pip 
+pip3 install pip-tools
 
 # jupyter notebook
 pip3 install jupyterlab
