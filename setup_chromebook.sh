@@ -1,15 +1,29 @@
 #!/bin/bash
 
+# #######################################################################################
+# 
+# INSTRUCTIONS:
+# Step 1: Run the script
+# Step 2: After script completes, close the terminal and reopen the terminal
+#
+# This script will install following packages on Chromebook:
+# 
+# gcloud skaffold kubectl kustomize kpt nomos anthoscli etc
+# vs code terraform terraform-docs terraform-validator pre-commit  
+# docker python jupyter-notebook
+#
+# #######################################################################################
+
 # enable debugging
 set -x
 
 # abort on error
 set -e
 
+CLOUDSDK_INSTALL_DIR=/home/$USER/.local
 TERRAFORM_VERSION=0.13.0
 TERRAFORM_VALIDATOR_VERSION=2021-03-22
 TERRAFORM_DOCS_VERSION=0.10.1
-KUSTOMIZE_VERSION=3.9.2
 
 sudo apt-get install -y apt-transport-https ca-certificates gnupg lsb-release dnsutils zip gawk unzip software-properties-common
 
@@ -22,10 +36,19 @@ sudo apt-get install -y code
 rm packages.microsoft.gpg
 
 # gcloud sdk
-echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
-sudo apt-get update
-sudo apt-get install -y google-cloud-sdk kubectl
+if [[ -d $CLOUDSDK_INSTALL_DIR/google-cloud-sdk ]]; then
+    echo "gcloud-sdk is already installed at $CLOUDSDK_INSTALL_DIR/google-cloud-sdk"
+else
+    curl https://sdk.cloud.google.com > install.sh
+    chmod +x install.sh
+    export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+    ./install.sh --install-dir=$CLOUDSDK_INSTALL_DIR
+    $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/bin/gcloud components install skaffold kubectl kustomize kpt nomos
+    echo "export PATH=$PATH:$CLOUDSDK_INSTALL_DIR/google-cloud-sdk/bin" >> "/home/$USER/.bashrc" 
+    echo ". $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/path.bash.inc" >> "/home/$USER/.bashrc"
+    echo ". $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/completion.bash.inc" >> "/home/$USER/.bashrc"
+    rm install.sh
+fi
 
 # terraform
 curl -k -O https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
@@ -39,12 +62,6 @@ mv terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64 terraform-docs
 chmod +x terraform-docs
 sudo mv terraform-docs /usr/local/bin
 
-# kustomize
-curl -k -LO https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
-tar xzf kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
-sudo mv kustomize /usr/local/bin
-rm kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz
-
 # python
 sudo apt install -y python3 python3-dev python3-venv python3-pip 
 pip3 install pip-tools
@@ -56,10 +73,9 @@ python3 -m bash_kernel.install
 
 # pre-commit terraform
 pip3 install pre-commit
-export PATH=$PATH:/home/$USER/.local/bin
 
-# terraform validator
-gsutil cp gs://terraform-validator/releases/${TERRAFORM_VALIDATOR_VERSION}/terraform-validator-linux-amd64 .
+# terraform-validator
+$CLOUDSDK_INSTALL_DIR/google-cloud-sdk/bin/gsutil cp gs://terraform-validator/releases/${TERRAFORM_VALIDATOR_VERSION}/terraform-validator-linux-amd64 .
 chmod +x terraform-validator-linux-amd64
 sudo mv terraform-validator-linux-amd64 /usr/local/bin/terraform-validator
 
