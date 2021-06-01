@@ -25,7 +25,7 @@ TERRAFORM_VERSION=0.13.6
 TERRAFORM_VALIDATOR_VERSION=2021-03-22
 TERRAFORM_DOCS_VERSION=0.10.1
 
-sudo apt-get install -y apt-transport-https ca-certificates gnupg lsb-release dnsutils zip gawk unzip software-properties-common
+sudo apt-get install -y apt-transport-https ca-certificates gnupg lsb-release dnsutils unzip
 
 # vs code
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
