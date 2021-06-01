@@ -10,7 +10,7 @@
 # 
 # gcloud skaffold kubectl kustomize kpt nomos anthoscli etc
 # vs code terraform terraform-docs terraform-validator pre-commit  
-# docker python jupyter-notebook
+# docker python3 jupyter-notebook
 #
 # #######################################################################################
 
