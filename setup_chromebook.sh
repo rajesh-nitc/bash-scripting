@@ -25,7 +25,8 @@ TERRAFORM_VERSION=0.13.6
 TERRAFORM_VALIDATOR_VERSION=2021-03-22
 TERRAFORM_DOCS_VERSION=0.10.1
 
-sudo apt-get install -y apt-transport-https ca-certificates gnupg lsb-release dnsutils unzip
+sudo apt-get update
+mkdir -p $CLOUDSDK_INSTALL_DIR/bin
 
 # vs code
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
@@ -51,6 +52,7 @@ else
 fi
 
 # terraform
+sudo apt-get install -y unzip
 curl -k -O https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 sudo mv terraform /usr/local/bin/
@@ -80,6 +82,7 @@ chmod +x terraform-validator-linux-amd64
 sudo mv terraform-validator-linux-amd64 /usr/local/bin/terraform-validator
 
 # docker
+sudo apt-get install -y apt-transport-https ca-certificates gnupg lsb-release
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
