@@ -20,7 +20,7 @@ set -x
 # abort on error
 set -e
 
-CLOUDSDK_INSTALL_DIR=/home/$USER/.local
+CLOUDSDK_INSTALL_DIR=$HOME/.local
 TERRAFORM_VERSION=0.13.6
 TERRAFORM_VALIDATOR_VERSION=2021-03-22
 TERRAFORM_DOCS_VERSION=0.10.1
@@ -45,9 +45,9 @@ else
     export CLOUDSDK_CORE_DISABLE_PROMPTS=1
     ./install.sh --install-dir=$CLOUDSDK_INSTALL_DIR
     $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/bin/gcloud components install skaffold kubectl kustomize kpt nomos
-    echo "export PATH=$PATH:$CLOUDSDK_INSTALL_DIR/google-cloud-sdk/bin" >> "/home/$USER/.bashrc" 
-    echo ". $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/path.bash.inc" >> "/home/$USER/.bashrc"
-    echo ". $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/completion.bash.inc" >> "/home/$USER/.bashrc"
+    echo "export PATH=$PATH:$CLOUDSDK_INSTALL_DIR/google-cloud-sdk/bin" >> "$HOME/.bashrc" 
+    echo ". $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/path.bash.inc" >> "$HOME/.bashrc"
+    echo ". $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/completion.bash.inc" >> "$HOME/.bashrc"
     rm install.sh
 fi
 
@@ -88,3 +88,6 @@ echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] 
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 sudo usermod -a -G docker ${USER}
+
+# optional
+echo "alias gcurl='curl -H \"Authorization: Bearer $(gcloud auth print-access-token)\" -H \"Content-Type: application/json\"'" >> $HOME/.bashrc
