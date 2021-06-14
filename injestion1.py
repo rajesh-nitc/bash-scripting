@@ -1,5 +1,6 @@
 import os
-import csv
+from typing import Dict
+import argparse
 
 
 class Data_Ingestion():
@@ -17,40 +18,67 @@ class Data_Ingestion():
         self.schema_file_path = schema_file_path
         self.csv_file_path = csv_file_path
 
-    def get_schema_fieldnames(self) -> list:
-        """[reads schema file]
-
+    def get_schema_column_names(self) -> list:
+        """
         Returns:
-            list: [list of fieldnames]
+            list: list of column names in the provided schema file
+                example: ["state","gender","year","name","number","created_date"]
         """
         with open(self.schema_file_path) as f:
             schema_str = f.read()
             schema_list = eval(schema_str)
             return [i["name"] for i in schema_list]
 
-    def get_single_row(self, csv_record: list) -> dict:
-        """
+    def get_single_row(self, csv_line: str) -> Dict[str, str]:
+        """This method translates a single line of comma separated values to a
+    dictionary which can be loaded into BigQuery
 
         Args:
-            csv_record (list): [list of values of a single csv record]
+            csv_line (str): A comma separated single csv line
+                example: KS1,F1,1923,Dorothy1,654,11/28/2016
 
         Returns:
-            dict: [dict with keys as schema fieldnames and values of a single csv record ]
+            Dict[str,str]: A dict mapping schema column names with the values from Arg csv_line
+                example: {'state': 'KS1', 'gender': 'F1', 'year': '1923', 'name': 'Dorothy1', 'number': '654', 'created_date': '11/28/2016'}
         """
-        list1 = self.get_schema_fieldnames()
-        list2 = csv_record
+        list1 = self.get_schema_column_names()
+        list2 = csv_line.split(",")
         combined_list = zip(list1, list2)
-        single_row_dict = dict(combined_list)
-        return single_row_dict
-
-    def print_row(self, csv_record) -> None:
-        row = self.get_single_row(csv_record)
-        print(row)
+        single_row = dict(combined_list)
+        return single_row
 
 
-data_injection = Data_Ingestion("usa_names.json", "usa_names.csv")
+def parse_args():
+    parser = argparse.ArgumentParser()
 
-with open(data_injection.csv_file_path) as f:
-    reader = csv.reader(f)
-    for i in reader:
-        data_injection.print_row(i)
+    parser.add_argument('--schema_filename',
+                        required=True,
+                        help='Name of the schema file')
+
+    parser.add_argument('--csv_filename',
+                        required=True,
+                        help='Name of the csv file')
+
+    parser.add_argument('--files_dir',
+                        required=False,
+                        default="resources",
+                        help='Name of dir which contains the schema,csv files')
+
+    args = parser.parse_args()
+
+    return args
+
+
+def main():
+    args = parse_args()
+    data_injection = Data_Ingestion(
+        args.schema_filename, args.csv_filename, args.files_dir)
+
+    with open(data_injection.csv_file_path) as f:
+        lines = f.readlines()
+        for line in lines:
+            print(data_injection.get_single_row(line.strip()))
+
+
+if __name__ == "__main__":
+    main()
