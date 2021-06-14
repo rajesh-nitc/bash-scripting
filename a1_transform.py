@@ -1,14 +1,15 @@
 from typing import Dict
-import injestion_base_class
+import a0_base
 
 
-class Data_Ingestion_Subclass(injestion_base_class.Data_Ingestion):
-    """There is basic data transformation.."""
+class DataIngestion_Subclass(a0_base.DataIngestion):
+    """This module uses base class. It also just prints dict rows on the console.
+    There is basic data transformation.."""
 
-    def __init__(self, schema_file_name: str, csv_file_name: str, resources_dir: str = "resources"):
-        super().__init__(schema_file_name, csv_file_name, resources_dir)
+    def __init__(self, schema_file_name: str, csv_file_name: str, input_dir: str = "input"):
+        super().__init__(schema_file_name, csv_file_name, input_dir)
 
-    def get_single_row_transformed(self, csv_line: str) -> Dict[str, str]:
+    def translate_csvline_todict(self, csv_line: str) -> Dict[str, str]:
         """This method translates a single line of comma separated values to a
     dictionary which can be loaded into BigQuery
 
@@ -31,13 +32,13 @@ class Data_Ingestion_Subclass(injestion_base_class.Data_Ingestion):
 
 
 def main():
-    args = injestion_base_class.parse_args()
-    transformed_data_injestion = Data_Ingestion_Subclass(
-        args.schema_filename, args.csv_filename, args.files_dir)
+    known_args, pipeline_args = a0_base.parse_args()
+    transformed_data_injestion = DataIngestion_Subclass(
+        known_args.schema_filename, known_args.csv_filename, known_args.files_dir)
     with open(transformed_data_injestion.csv_file_path) as f:
         lines = f.readlines()
         for line in lines:
-            print(transformed_data_injestion.get_single_row_transformed(line.strip()))
+            print(transformed_data_injestion.translate_csvline_todict(line.strip()))
 
 
 if __name__ == "__main__":

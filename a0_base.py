@@ -3,23 +3,27 @@ from typing import Dict
 import argparse
 
 
-class Data_Ingestion():
-    """There is no data transformation."""
+class DataIngestion():
+    """This a base class. The beam pipeline 'string to bigquery row' step
+    require input as a single csv line in string format. This module implement
+    translate_csvline_todict func which does that. The single line input to this
+    func is simulated by 'for line in lines'. This module just prints the dict 
+    rows on console."""
 
-    def __init__(self, schema_file_name: str, csv_file_name: str, resources_dir: str = "resources"):
+    def __init__(self, schema_file_name: str, csv_file_name: str, input_dir: str = "input"):
         self.schema_file_name = schema_file_name
         self.csv_file_name = csv_file_name
-        self.resources_dir = resources_dir
+        self.input_dir = input_dir
 
         current_dir = os.path.dirname(os.path.realpath(__file__))
         schema_file_path = os.path.join(
-            current_dir, resources_dir, schema_file_name)
-        csv_file_path = os.path.join(current_dir, resources_dir, csv_file_name)
+            current_dir, input_dir, schema_file_name)
+        csv_file_path = os.path.join(current_dir, input_dir, csv_file_name)
         self.schema_file_path = schema_file_path
         self.csv_file_path = csv_file_path
 
     def get_schema_column_names(self) -> list:
-        """
+        """reads schema json
         Returns:
             list: list of column names in the provided schema file
                 example: ["state","gender","year","name","number","created_date"]
@@ -29,7 +33,7 @@ class Data_Ingestion():
             schema_list = eval(schema_str)
             return [i["name"] for i in schema_list]
 
-    def get_single_row(self, csv_line: str) -> Dict[str, str]:
+    def translate_csvline_todict(self, csv_line: str) -> Dict[str, str]:
         """This method translates a single line of comma separated values to a
     dictionary which can be loaded into BigQuery
 
@@ -61,23 +65,23 @@ def parse_args():
 
     parser.add_argument('--files_dir',
                         required=False,
-                        default="resources",
+                        default="input",
                         help='Name of dir which contains the schema,csv files')
 
-    args = parser.parse_args()
+    known_args, pipeline_args = parser.parse_known_args()
 
-    return args
+    return known_args, pipeline_args
 
 
 def main():
-    args = parse_args()
-    data_injection = Data_Ingestion(
-        args.schema_filename, args.csv_filename, args.files_dir)
+    known_args, pipeline_args = parse_args()
+    data_injection = DataIngestion(
+        known_args.schema_filename, known_args.csv_filename, known_args.files_dir)
 
     with open(data_injection.csv_file_path) as f:
         lines = f.readlines()
         for line in lines:
-            print(data_injection.get_single_row(line.strip()))
+            print(data_injection.translate_csvline_todict(line.strip()))
 
 
 if __name__ == "__main__":
