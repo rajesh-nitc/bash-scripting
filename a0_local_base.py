@@ -75,13 +75,13 @@ def parse_args():
 
 def main():
     known_args, pipeline_args = parse_args()
-    data_injection = DataIngestion(
+    data_injestion = DataIngestion(
         known_args.schema_filename, known_args.csv_filename, known_args.files_dir)
 
-    with open(data_injection.csv_file_path) as f:
+    with open(data_injestion.csv_file_path) as f:
         lines = f.readlines()
         for line in lines:
-            print(data_injection.translate_csvline_todict(line.strip()))
+            print(data_injestion.translate_csvline_todict(line.strip()))
 
 
 if __name__ == "__main__":

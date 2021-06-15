@@ -11,7 +11,7 @@
     },
     {
       "name": "year",
-      "type": "DATE",
+      "type": "STRING",
       "description": "Year the child was born in date format."
     },
     {
@@ -21,18 +21,12 @@
     },
     {
       "name": "number",
-      "type": "INTEGER",
+      "type": "STRING",
       "description": "The number of new born children sharing this name for the year in the given state."
     },
     {
       "name": "created_date",
       "type": "STRING",
       "description": "Date this data was created."
-    },
-    {
-      "name": "state_full_name",
-      "type": "STRING",
-      "description": "Full name of the state where the child was born."
-    }
-    
+    }   
   ]

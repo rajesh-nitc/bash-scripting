@@ -1,8 +1,8 @@
 from typing import Dict
-import a0_base
+import a0_local_base
 
 
-class DataIngestion_Subclass(a0_base.DataIngestion):
+class DataIngestion_Subclass(a0_local_base.DataIngestion):
     """This module uses base class. It also just prints dict rows on the console.
     There is basic data transformation.."""
 
@@ -32,7 +32,7 @@ class DataIngestion_Subclass(a0_base.DataIngestion):
 
 
 def main():
-    known_args, pipeline_args = a0_base.parse_args()
+    known_args, pipeline_args = a0_local_base.parse_args()
     transformed_data_injestion = DataIngestion_Subclass(
         known_args.schema_filename, known_args.csv_filename, known_args.files_dir)
     with open(transformed_data_injestion.csv_file_path) as f:

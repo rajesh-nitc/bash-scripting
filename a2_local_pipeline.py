@@ -1,11 +1,10 @@
 from apache_beam.io.textio import WriteToText
-import a0_base
-import argparse
+import a0_local_base
 import apache_beam as beam
 from apache_beam.options.pipeline_options import PipelineOptions
 
 
-class Data_ingestion_local_pipeline_subclass(a0_base.DataIngestion):
+class Data_ingestion_local_pipeline_subclass(a0_local_base.DataIngestion):
     """.."""
 
     def __init__(self, schema_file_name: str, csv_file_name: str, input_dir: str = "input", output_dir: str = "output/out.txt"):
@@ -14,7 +13,7 @@ class Data_ingestion_local_pipeline_subclass(a0_base.DataIngestion):
 
 
 def main():
-    known_args, pipeline_args = a0_base.parse_args()
+    known_args, pipeline_args = a0_local_base.parse_args()
     data_ingestion = Data_ingestion_local_pipeline_subclass(
         known_args.schema_filename, known_args.csv_filename, known_args.files_dir)
 
