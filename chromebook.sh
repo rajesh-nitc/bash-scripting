@@ -76,6 +76,9 @@ python3 -m bash_kernel.install
 # pre-commit terraform
 pip3 install pre-commit
 
+# tflint
+curl https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
 # terraform-validator
 $CLOUDSDK_INSTALL_DIR/google-cloud-sdk/bin/gsutil cp gs://terraform-validator/releases/${TERRAFORM_VALIDATOR_VERSION}/terraform-validator-linux-amd64 .
 chmod +x terraform-validator-linux-amd64
